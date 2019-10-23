@@ -49,7 +49,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 	@Override
 	public void atualizarProduto(Produto p) {
 		Session session = sessionFactory.getCurrentSession();
-
+		session.clear();
 		session.update(p);
 
 	}

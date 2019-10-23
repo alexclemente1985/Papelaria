@@ -3,6 +3,7 @@ package com.alexandre.papelaria.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,9 +35,9 @@ public class PapelariaController {
 	}
 
 	@RequestMapping(value = "/produtos/listarprodutos", method = RequestMethod.GET, headers = "Accept=application/json")
-	public List<Produto> listarProdutos() {
+	public ResponseEntity<List<Produto>> listarProdutos() {
 		List<Produto> produtos = prodService.listarProdutos();
-		return produtos;
+		return new ResponseEntity<List<Produto>>(produtos,HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/produtos/cadastrarprodutos", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -49,27 +50,31 @@ public class PapelariaController {
 	}
 
 	@RequestMapping(value = "/produtos/atualizarproduto", method = RequestMethod.PUT, headers = "Accept=application/json")
-	public Produto atualizarProduto(@RequestBody Produto p) {
+	public ResponseEntity<?> atualizarProduto(@RequestBody Produto p) {
 		prodService.atualizarProduto(p);
-		return p;
+		return new ResponseEntity<Produto>(p,HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/produtos/exibirproduto/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public Produto exibirProduto(@PathVariable Integer id) {
+	public ResponseEntity<?> exibirProduto(@PathVariable Integer id) {
 		Produto p = prodService.exibirProduto(id);
-		return p;
+		return new ResponseEntity<Produto>(p,HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/produtos/removerproduto/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public void removerProduto(@PathVariable Integer id) {
+	public ResponseEntity<?> removerProduto(@PathVariable Integer id) {
 		prodService.removerProduto(id);
+		
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/categorias/listarcategorias", method = RequestMethod.GET, headers = "Accept=application/json")
-	public List<Categoria> listarCategorias() {
+	public ResponseEntity<List<Categoria>> listarCategorias() {
 		List<Categoria> categorias = catService.listarCategorias();
-
-		return categorias;
+		if(categorias.size()==0) {
+			return new ResponseEntity<List<Categoria>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Categoria>>(categorias,HttpStatus.OK);
 	}
 
 }

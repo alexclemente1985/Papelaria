@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import com.alexandre.papelaria.dao.CategoriaDAO;
 import com.alexandre.papelaria.dao.ProdutoDAO;
 import com.alexandre.papelaria.exceptions.CategoryNotFoundException;
+import com.alexandre.papelaria.exceptions.EmptyDatabase;
 import com.alexandre.papelaria.exceptions.NullBarcodeException;
 import com.alexandre.papelaria.exceptions.ProductNotFoundException;
 import com.alexandre.papelaria.exceptions.RepeatedBarcodeException;
@@ -47,7 +48,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 		if (prodList.size() == 0) {
 			String errMsg = message.emptyDatabase();
 
-			throw new ProductNotFoundException(errMsg);
+			throw new EmptyDatabase(errMsg);
 		}
 
 		return prodList;
@@ -94,7 +95,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 	@Override
 	@Transactional
 	public Produto atualizarProduto(Produto p) {
-		if (dao.exibirProduto(p.getBarcode()).equals(null)) {
+		if (dao.exibirProduto(p.getBarcode())==null) {
 
 			String errMsg = message.productNotFound(p.getBarcode());
 
