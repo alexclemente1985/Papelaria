@@ -76,7 +76,7 @@ public class PapelariaControllerIT extends PapelariaApplicationTests {
 	
 	when(mockProdRepository.exibirProduto(produto.getBarcode())).thenReturn(produto);
 	mockMvc.perform(get(BASE_URL + "/exibirproduto/1"))
-	.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+	.andExpect(content().contentType(MediaType.APPLICATION_JSON))
     .andExpect(status().isOk())
     .andExpect(jsonPath("$.barcode",is(1)))
     .andExpect(jsonPath("$.nome",is("teste")))
